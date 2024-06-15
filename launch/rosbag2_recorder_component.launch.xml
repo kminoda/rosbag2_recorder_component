@@ -1,0 +1,14 @@
+<launch>
+  <!-- select container type -->
+  <arg name="use_multithread" default="false"/>
+  <let name="container_type" value="component_container" unless="$(var use_multithread)"/>
+  <let name="container_type" value="component_container_mt" if="$(var use_multithread)"/>
+
+  <node_container pkg="rclcpp_components" exec="$(var container_type)" name="test_container" namespace="" args="" output="screen">
+  </node_container>
+
+  <load_composable_node target="/test_container">
+    <composable_node pkg="rosbag2_recorder_component" plugin="rosbag2_transport::RecorderComponent" name="rosbag2_recorder" namespace="">
+    </composable_node>
+  </load_composable_node>
+</launch>
