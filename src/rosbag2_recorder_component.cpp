@@ -11,12 +11,8 @@ RecorderComponent::RecorderComponent(const rclcpp::NodeOptions & options)
     "rosbag2_recorder_transport",
     options)
 {
-  // print parameter_overrides in options
-  RCLCPP_INFO(this->get_logger(), "RecorderComponent initialized with parameter_overrides:");
-  for (const auto & parameter : options.parameter_overrides()) {
-    RCLCPP_INFO(this->get_logger(), "  %s: %s", parameter.get_name().c_str(), parameter.value_to_string().c_str());
-  }
-  RCLCPP_INFO(this->get_logger(), this->storage_options_.uri.c_str());
+  // output storage uri
+  RCLCPP_INFO(this->get_logger(), "Rosbag will be written in %s", this->storage_options_.uri.c_str());
 
   // output use_sim_time
   RCLCPP_INFO(this->get_logger(), "use_sim_time: %s", this->record_options_.use_sim_time ? "true" : "false");
@@ -57,7 +53,6 @@ rosbag2_transport::RecordOptions RecorderComponent::get_record_options_from_node
       while (std::getline(iss, topic, ',')) {
         record_options.topics.push_back(topic);
       }
-      break;
     } else if (parameter.get_name() == "serialization_format") {
       record_options.rmw_serialization_format = parameter.value_to_string();
     } else if (parameter.get_name() == "use_sim_time") {
