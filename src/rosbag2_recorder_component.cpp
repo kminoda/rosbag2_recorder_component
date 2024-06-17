@@ -18,6 +18,9 @@ RecorderComponent::RecorderComponent(const rclcpp::NodeOptions & options)
   }
   RCLCPP_INFO(this->get_logger(), this->storage_options_.uri.c_str());
 
+  // output use_sim_time
+  RCLCPP_INFO(this->get_logger(), "use_sim_time: %s", this->record_options_.use_sim_time ? "true" : "false");
+
   // output all topics
   for (const auto & topic : this->record_options_.topics) {
     RCLCPP_INFO(this->get_logger(), "Recording topic: %s", topic.c_str());
@@ -57,6 +60,8 @@ rosbag2_transport::RecordOptions RecorderComponent::get_record_options_from_node
       break;
     } else if (parameter.get_name() == "serialization_format") {
       record_options.rmw_serialization_format = parameter.value_to_string();
+    } else if (parameter.get_name() == "use_sim_time") {
+      record_options.use_sim_time = parameter.value_to_string() == "true";
     }
   }
 
